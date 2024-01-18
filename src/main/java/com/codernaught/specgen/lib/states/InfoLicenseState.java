@@ -34,7 +34,6 @@ public class InfoLicenseState implements State {
             if ("url".equals(fieldName)) {
                 parser.nextToken();
                 System.out.println("License URL: " + parser.getText());
-                continue;
             }
         }
     }

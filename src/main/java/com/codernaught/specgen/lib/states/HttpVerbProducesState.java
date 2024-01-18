@@ -22,6 +22,7 @@ public class HttpVerbProducesState implements State {
     @Override
     public void process() throws IOException {
         YAMLParser parser = context.getParser();
+        parser.nextToken();
         while (parser.nextToken() != JsonToken.END_ARRAY) {
             System.out.println("produces: " + parser.getText());
         }

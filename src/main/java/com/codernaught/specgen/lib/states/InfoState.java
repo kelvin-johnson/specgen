@@ -25,23 +25,20 @@ public class InfoState implements State {
             String fieldName = parser.getCurrentName();
 
             if ("description".equals(fieldName)) {
-                System.out.println("fieldName: " + fieldName);
                 parser.nextToken();
-                System.out.println("fieldValue: " + parser.getText());
+                System.out.println("description: " + parser.getText());
                 continue;
             }
 
             if ("version".equals(fieldName)) {
-                System.out.println("fieldName: " + fieldName);
                 parser.nextToken();
-                System.out.println("fieldValue: " + parser.getText());
+                System.out.println("version: " + parser.getText());
                 continue;
             }
 
             if ("title".equals(fieldName)) {
-                System.out.println("fieldName: " + fieldName);
                 parser.nextToken();
-                System.out.println("fieldValue: " + parser.getText());
+                System.out.println("title: " + parser.getText());
                 continue;
             }
 
@@ -54,7 +51,6 @@ public class InfoState implements State {
             if ("license".equals(fieldName)) {
                 State infoLicenseState = new InfoLicenseState(context);
                 infoLicenseState.process();
-                continue;
             }
         }
     }

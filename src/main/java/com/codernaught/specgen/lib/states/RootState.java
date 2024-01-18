@@ -1,9 +1,7 @@
 package com.codernaught.specgen.lib.states;
 
 import com.codernaught.specgen.lib.Context;
-import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
-
 import java.io.IOException;
 
 public class RootState implements State {
@@ -25,6 +23,12 @@ public class RootState implements State {
 
             String fieldName = parser.getCurrentName();
 
+            if ("swagger".equals(fieldName)) {
+                parser.nextToken();
+                System.out.println("swagger: " + parser.getText());
+                continue;
+            }
+
             if ("info".equals(fieldName)) {
                 parser.hasCurrentToken();
                 State infoState = new InfoState(context);
@@ -33,9 +37,8 @@ public class RootState implements State {
             }
 
             if ("basePath".equals(fieldName)) {
-                System.out.println("fieldName: " + fieldName);
                 parser.nextToken();
-                System.out.println("fieldValue: " + parser.getText());
+                System.out.println("basePath: " + parser.getText());
                 continue;
             }
 
@@ -46,7 +49,7 @@ public class RootState implements State {
             }
 
             if ("paths".equals(fieldName)) {
-                State pathState = new PathState(context);
+                State pathState = new PathsState(context);
                 pathState.process();
                 continue;
             }
@@ -54,7 +57,6 @@ public class RootState implements State {
             if ("schemes".equals(fieldName)) {
                 State schemeState = new SchemeState(context);
                 schemeState.process();
-                continue;
             }
         }
         parser.close();

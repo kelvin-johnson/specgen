@@ -3,13 +3,13 @@ package com.codernaught.specgen.lib.states;
 import com.codernaught.specgen.lib.Context;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
-
 import java.io.IOException;
 
-public class InfoContactState implements State {
+public class PathsState implements State {
+
     private Context context;
 
-    public InfoContactState(Context context) {
+    public PathsState(Context context) {
         this.context = context;
     }
 
@@ -24,16 +24,12 @@ public class InfoContactState implements State {
         while (parser.nextToken() != JsonToken.END_OBJECT) {
             String fieldName = parser.getCurrentName();
 
-            if ("name".equals(fieldName)) {
-                parser.nextToken();
-                System.out.println("Contact Name: " + parser.getText());
-                continue;
+            if (fieldName.startsWith("/")) {
+                System.out.println("path: " + fieldName);
+                State pathState = new PathState(context);
+                pathState.process();
             }
 
-            if ("url".equals(fieldName)) {
-                parser.nextToken();
-                System.out.println("Contact URL: " + parser.getText());
-            }
         }
     }
 }

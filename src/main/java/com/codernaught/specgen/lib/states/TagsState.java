@@ -3,7 +3,6 @@ package com.codernaught.specgen.lib.states;
 import com.codernaught.specgen.lib.Context;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
-
 import java.io.IOException;
 
 public class TagsState implements State {
@@ -28,7 +27,6 @@ public class TagsState implements State {
             if ("name".equals(fieldName)) {
                 parser.nextToken();
                 System.out.println("Tag Name: " + parser.getText());
-                continue;
             }
         }
     }

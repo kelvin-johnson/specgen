@@ -3,7 +3,6 @@ package com.codernaught.specgen.lib.states;
 import com.codernaught.specgen.lib.Context;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
-
 import java.io.IOException;
 
 public class HttpVerbTagState implements State {
@@ -22,6 +21,7 @@ public class HttpVerbTagState implements State {
     @Override
     public void process() throws IOException {
         YAMLParser parser = context.getParser();
+        parser.nextToken();
         while (parser.nextToken() != JsonToken.END_ARRAY) {
             System.out.println("Tag: " + parser.getText());
         }

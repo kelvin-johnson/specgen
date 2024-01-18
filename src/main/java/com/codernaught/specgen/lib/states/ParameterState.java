@@ -3,7 +3,6 @@ package com.codernaught.specgen.lib.states;
 import com.codernaught.specgen.lib.Context;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
-
 import java.io.IOException;
 
 public class ParameterState implements State {
@@ -26,34 +25,32 @@ public class ParameterState implements State {
 
             if ("in".equals(fieldName)) {
                 parser.nextToken();
-                System.out.println("Info: " + parser.getText());
+                System.out.println("in: " + parser.getText());
                 continue;
             }
 
             if ("name".equals(fieldName)) {
                 parser.nextToken();
-                System.out.println("Info: " + parser.getText());
+                System.out.println("name: " + parser.getText());
                 continue;
             }
 
             if ("required".equals(fieldName)) {
                 parser.nextToken();
-                System.out.println("Info: " + parser.getText());
+                System.out.println("required: " + parser.getText());
                 continue;
             }
 
             if ("type".equals(fieldName)) {
                 parser.nextToken();
-                System.out.println("Info: " + parser.getText());
+                System.out.println("type: " + parser.getText());
                 continue;
             }
 
             if ("schema".equals(fieldName)) {
                 State schemaState = new SchemaState(context);
                 schemaState.process();
-                continue;
             }
-
         }
     }
 }

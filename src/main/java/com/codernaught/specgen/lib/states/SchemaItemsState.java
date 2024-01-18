@@ -5,12 +5,11 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
 import java.io.IOException;
 
-public class SchemaState implements State {
+public class SchemaItemsState implements State {
 
     private Context context;
 
-
-    public SchemaState(Context context) {
+    public SchemaItemsState(Context context) {
         this.context = context;
     }
 
@@ -22,13 +21,9 @@ public class SchemaState implements State {
     @Override
     public void process() throws IOException {
         YAMLParser parser = context.getParser();
+
         while (parser.nextToken() != JsonToken.END_OBJECT) {
             String fieldName = parser.getCurrentName();
-            if ("$ref".equals(fieldName)) {
-                parser.nextToken();
-                System.out.println("$ref: " + parser.getText());
-                continue;
-            }
 
             if("type".equals(fieldName)) {
                 parser.nextToken();
@@ -36,10 +31,21 @@ public class SchemaState implements State {
                 continue;
             }
 
-            if("items".equals(fieldName)) {
+            if("format".equals(fieldName)) {
                 parser.nextToken();
-                State schemaItemsState = new SchemaItemsState(context);
-                schemaItemsState.process();
+                System.out.println("format: " + parser.getText());
+                continue;
+            }
+
+            if("$ref".equals(fieldName)) {
+                parser.nextToken();
+                System.out.println("$ref: " + parser.getText());
+                continue;
+            }
+
+            if("additionalProperties".equals(fieldName)) {
+                State additionalPropertiesState = new AdditionalPropertiesState(context);
+                additionalPropertiesState.process();
             }
         }
     }

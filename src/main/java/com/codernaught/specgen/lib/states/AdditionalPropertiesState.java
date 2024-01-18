@@ -3,19 +3,18 @@ package com.codernaught.specgen.lib.states;
 import com.codernaught.specgen.lib.Context;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
-
 import java.io.IOException;
 
-public class InfoContactState implements State {
+public class AdditionalPropertiesState implements State {
     private Context context;
 
-    public InfoContactState(Context context) {
+    public AdditionalPropertiesState(Context context) {
         this.context = context;
     }
 
     @Override
     public void setState(State state) {
-        context.setCurrentState(state);
+        this.context.setCurrentState(state);
     }
 
     @Override
@@ -24,15 +23,9 @@ public class InfoContactState implements State {
         while (parser.nextToken() != JsonToken.END_OBJECT) {
             String fieldName = parser.getCurrentName();
 
-            if ("name".equals(fieldName)) {
+            if("type".equals(fieldName)) {
                 parser.nextToken();
-                System.out.println("Contact Name: " + parser.getText());
-                continue;
-            }
-
-            if ("url".equals(fieldName)) {
-                parser.nextToken();
-                System.out.println("Contact URL: " + parser.getText());
+                System.out.println("type: " + parser.getText());
             }
         }
     }
