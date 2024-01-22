@@ -1,6 +1,5 @@
 package com.codernaught.specgen.lib;
 
-import com.codernaught.specgen.lib.states.InfoState;
 import com.codernaught.specgen.lib.states.RootState;
 import com.codernaught.specgen.lib.states.State;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
