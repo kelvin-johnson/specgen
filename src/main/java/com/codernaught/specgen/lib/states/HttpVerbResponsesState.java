@@ -34,7 +34,8 @@ public class HttpVerbResponsesState implements State {
 
                 System.out.println("Http Status Code: " + fieldName);
                 State httpResponseState = new HttpResponseState(context);
-                httpResponseState.process();
+                setState(httpResponseState);
+                context.process();
             }
         }
     }

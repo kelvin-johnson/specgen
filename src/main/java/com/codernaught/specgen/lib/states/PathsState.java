@@ -27,7 +27,8 @@ public class PathsState implements State {
             if (fieldName.startsWith("/")) {
                 System.out.println("path: " + fieldName);
                 State pathState = new PathState(context);
-                pathState.process();
+                setState(pathState);
+                context.process();
             }
 
         }

@@ -49,7 +49,8 @@ public class ParameterState implements State {
 
             if ("schema".equals(fieldName)) {
                 State schemaState = new SchemaState(context);
-                schemaState.process();
+                setState(schemaState);
+                context.process();
             }
         }
     }

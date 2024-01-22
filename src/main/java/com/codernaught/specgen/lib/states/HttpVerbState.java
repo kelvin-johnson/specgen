@@ -21,7 +21,8 @@ public class HttpVerbState implements State {
             String fieldName = parser.getCurrentName();
             if("tags".equals(fieldName)) {
                 State httpVerbTagState = new HttpVerbTagState(context);
-                httpVerbTagState.process();
+                setState(httpVerbTagState);
+                context.process();
                 continue;
             }
 
@@ -45,25 +46,29 @@ public class HttpVerbState implements State {
 
             if("produces".equals(fieldName)) {
                 State httpVerbProducesState = new HttpVerbProducesState(context);
-                httpVerbProducesState.process();
+                setState(httpVerbProducesState);
+                context.process();
                 continue;
             }
 
             if("parameters".equals(fieldName)) {
                 State httpVerbParametersState = new HttpVerbParametersState(context);
-                httpVerbParametersState.process();
+                setState(httpVerbParametersState);
+                context.process();
                 continue;
             }
 
             if("responses".equals(fieldName)) {
                 State httpVerbResponsesState = new HttpVerbResponsesState(context);
-                httpVerbResponsesState.process();
+                setState(httpVerbResponsesState);
+                context.process();
                 continue;
             }
 
             if("security".equals(fieldName)) {
                 State httpVerbSecurityState = new HttpVerbSecurityState(context);
-                httpVerbSecurityState.process();
+                setState(httpVerbSecurityState);
+                context.process();
             }
         }
     }

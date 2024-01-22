@@ -28,7 +28,8 @@ public class PathState implements State {
                     || "delete".equals(fieldName)) {
                 System.out.println("httpVerb: " + fieldName);
                 State httpVerbState = new HttpVerbState(context);
-                httpVerbState.process();
+                setState(httpVerbState);
+                context.process();
             }
         }
     }

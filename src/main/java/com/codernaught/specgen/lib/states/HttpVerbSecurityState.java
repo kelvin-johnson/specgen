@@ -24,7 +24,8 @@ public class HttpVerbSecurityState implements State {
         YAMLParser parser = context.getParser();
         while (parser.nextToken() != JsonToken.END_ARRAY) {
             State methodSecurityState = new MethodSecurityState(context);
-            methodSecurityState.process();
+            setState(methodSecurityState);
+            context.process();
         }
     }
 }

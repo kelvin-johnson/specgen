@@ -39,7 +39,8 @@ public class SchemaState implements State {
             if("items".equals(fieldName)) {
                 parser.nextToken();
                 State schemaItemsState = new SchemaItemsState(context);
-                schemaItemsState.process();
+                setState(schemaItemsState);
+                context.process();
             }
         }
     }

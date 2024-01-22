@@ -45,7 +45,8 @@ public class SchemaItemsState implements State {
 
             if("additionalProperties".equals(fieldName)) {
                 State additionalPropertiesState = new AdditionalPropertiesState(context);
-                additionalPropertiesState.process();
+                setState(additionalPropertiesState);
+                context.process();
             }
         }
     }

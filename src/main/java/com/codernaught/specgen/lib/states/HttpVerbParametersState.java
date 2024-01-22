@@ -24,7 +24,8 @@ public class HttpVerbParametersState implements State {
         YAMLParser parser = context.getParser();
         while (parser.nextToken() != JsonToken.END_ARRAY) {
             State parameterState = new ParameterState(context);
-            parameterState.process();
+            setState(parameterState);
+            context.process();
         }
     }
 }

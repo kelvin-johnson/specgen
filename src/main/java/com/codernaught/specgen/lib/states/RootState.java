@@ -32,7 +32,8 @@ public class RootState implements State {
             if ("info".equals(fieldName)) {
                 parser.hasCurrentToken();
                 State infoState = new InfoState(context);
-                infoState.process();
+                setState(infoState);
+                context.process();
                 continue;
             }
 
@@ -44,19 +45,22 @@ public class RootState implements State {
 
             if ("tags".equals(fieldName)) {
                 State tagsState = new TagsState(context);
-                tagsState.process();
+                setState(tagsState);
+                context.process();
                 continue;
             }
 
             if ("paths".equals(fieldName)) {
                 State pathState = new PathsState(context);
-                pathState.process();
+                setState(pathState);
+                context.process();
                 continue;
             }
 
             if ("schemes".equals(fieldName)) {
                 State schemeState = new SchemeState(context);
-                schemeState.process();
+                setState(schemeState);
+                context.process();
             }
         }
         parser.close();

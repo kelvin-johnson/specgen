@@ -44,13 +44,15 @@ public class InfoState implements State {
 
             if ("contact".equals(fieldName)) {
                 State infoContactState = new InfoContactState(context);
-                infoContactState.process();
+                setState(infoContactState);
+                context.process();
                 continue;
             }
 
             if ("license".equals(fieldName)) {
                 State infoLicenseState = new InfoLicenseState(context);
-                infoLicenseState.process();
+                setState(infoLicenseState);
+                context.process();
             }
         }
     }
