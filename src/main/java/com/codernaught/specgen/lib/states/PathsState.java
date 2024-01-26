@@ -5,18 +5,8 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
 import java.io.IOException;
 
-public class PathsState implements State {
-
-    private Context context;
-
-    public PathsState(Context context) {
-        this.context = context;
-    }
-
-    @Override
-    public void setState(State state) {
-        context.setCurrentState(state);
-    }
+public class PathsState extends State {
+    protected PathsState() {}
 
     @Override
     public void process() throws IOException {
@@ -26,11 +16,20 @@ public class PathsState implements State {
 
             if (fieldName.startsWith("/")) {
                 System.out.println("path: " + fieldName);
-                State pathState = new PathState(context);
+                IState pathState = PathState.getInstance(context);
                 setState(pathState);
                 context.process();
             }
 
         }
+    }
+
+    public static PathsState getInstance(Context context) {
+        SingletonHelper.INSTANCE.setContext(context);
+        return SingletonHelper.INSTANCE;
+    }
+
+    private static class SingletonHelper {
+        private static final PathsState INSTANCE = new PathsState();
     }
 }

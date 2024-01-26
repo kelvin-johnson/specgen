@@ -4,17 +4,8 @@ import com.codernaught.specgen.lib.Context;
 import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
 import java.io.IOException;
 
-public class RootState implements State {
-    private Context context;
-
-    public RootState(Context context) {
-        this.context = context;
-    }
-
-    @Override
-    public void setState(State state) {
-        context.setCurrentState(state);
-    }
+public class RootState extends State {
+    protected RootState() {}
 
     @Override
     public void process() throws IOException {
@@ -31,7 +22,7 @@ public class RootState implements State {
 
             if ("info".equals(fieldName)) {
                 parser.hasCurrentToken();
-                State infoState = new InfoState(context);
+                IState infoState = InfoState.getInstance(context);
                 setState(infoState);
                 context.process();
                 continue;
@@ -44,21 +35,21 @@ public class RootState implements State {
             }
 
             if ("tags".equals(fieldName)) {
-                State tagsState = new TagsState(context);
+                IState tagsState = TagsState.getInstance(context);
                 setState(tagsState);
                 context.process();
                 continue;
             }
 
             if ("paths".equals(fieldName)) {
-                State pathState = new PathsState(context);
+                IState pathState = PathsState.getInstance(context);
                 setState(pathState);
                 context.process();
                 continue;
             }
 
             if ("schemes".equals(fieldName)) {
-                State schemeState = new SchemeState(context);
+                IState schemeState = SchemeState.getInstance(context);
                 setState(schemeState);
                 context.process();
             }
@@ -66,6 +57,14 @@ public class RootState implements State {
         parser.close();
     }
 
-
     public void process(String fieldName, String fieldValue) throws IOException {}
+
+    public static RootState getInstance(Context context) {
+        SingletonHelper.INSTANCE.setContext(context);
+        return SingletonHelper.INSTANCE;
+    }
+
+    private static class SingletonHelper {
+        private static final RootState INSTANCE = new RootState();
+    }
 }

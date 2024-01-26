@@ -5,17 +5,8 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
 import java.io.IOException;
 
-public class HttpResponseState implements State {
-    private Context context;
-
-    public HttpResponseState(Context context) {
-        this.context = context;
-    }
-
-    @Override
-    public void setState(State state) {
-        this.context.setCurrentState(state);
-    }
+public class HttpResponseState extends State {
+    protected HttpResponseState() {}
 
     @Override
     public void process() throws IOException {
@@ -30,10 +21,19 @@ public class HttpResponseState implements State {
             }
 
             if("schema".equals(fieldName)) {
-                State schemaState = new SchemaState(context);
+                IState schemaState = SchemaState.getInstance(context);
                 setState(schemaState);
                 context.process();
             }
         }
+    }
+
+    public static HttpResponseState getInstance(Context context) {
+        SingletonHelper.INSTANCE.setContext(context);
+        return SingletonHelper.INSTANCE;
+    }
+
+    private static class SingletonHelper {
+        private static final HttpResponseState INSTANCE = new HttpResponseState();
     }
 }

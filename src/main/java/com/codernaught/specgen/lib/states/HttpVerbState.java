@@ -3,16 +3,10 @@ package com.codernaught.specgen.lib.states;
 import com.codernaught.specgen.lib.Context;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
-
 import java.io.IOException;
 
-public class HttpVerbState implements State {
-    private Context context;
-
-    @Override
-    public void setState(State state) { this.context.setCurrentState(state); }
-
-    public HttpVerbState(Context context) { this.context = context; }
+public class HttpVerbState extends State {
+    protected HttpVerbState() { }
 
     @Override
     public void process() throws IOException {
@@ -20,7 +14,7 @@ public class HttpVerbState implements State {
         while (parser.nextToken() != JsonToken.END_OBJECT) {
             String fieldName = parser.getCurrentName();
             if("tags".equals(fieldName)) {
-                State httpVerbTagState = new HttpVerbTagState(context);
+                IState httpVerbTagState = HttpVerbTagState.getInstance(context);
                 setState(httpVerbTagState);
                 context.process();
                 continue;
@@ -45,31 +39,39 @@ public class HttpVerbState implements State {
             }
 
             if("produces".equals(fieldName)) {
-                State httpVerbProducesState = new HttpVerbProducesState(context);
+                IState httpVerbProducesState = HttpVerbParametersState.getInstance(context);
                 setState(httpVerbProducesState);
                 context.process();
                 continue;
             }
 
             if("parameters".equals(fieldName)) {
-                State httpVerbParametersState = new HttpVerbParametersState(context);
+                IState httpVerbParametersState = HttpVerbParametersState.getInstance(context);
                 setState(httpVerbParametersState);
                 context.process();
                 continue;
             }
 
             if("responses".equals(fieldName)) {
-                State httpVerbResponsesState = new HttpVerbResponsesState(context);
+                IState httpVerbResponsesState = HttpVerbParametersState.getInstance(context);
                 setState(httpVerbResponsesState);
                 context.process();
                 continue;
             }
 
             if("security".equals(fieldName)) {
-                State httpVerbSecurityState = new HttpVerbSecurityState(context);
+                IState httpVerbSecurityState = HttpVerbParametersState.getInstance(context);
                 setState(httpVerbSecurityState);
                 context.process();
             }
         }
+    }
+    public static HttpVerbState getInstance(Context context) {
+        SingletonHelper.INSTANCE.setContext(context);
+        return SingletonHelper.INSTANCE;
+    }
+
+    private static class SingletonHelper {
+        private static final HttpVerbState INSTANCE = new HttpVerbState();
     }
 }

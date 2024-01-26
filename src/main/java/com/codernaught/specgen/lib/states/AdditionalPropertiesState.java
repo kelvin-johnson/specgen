@@ -5,17 +5,8 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
 import java.io.IOException;
 
-public class AdditionalPropertiesState implements State {
-    private Context context;
-
-    public AdditionalPropertiesState(Context context) {
-        this.context = context;
-    }
-
-    @Override
-    public void setState(State state) {
-        this.context.setCurrentState(state);
-    }
+public class AdditionalPropertiesState extends State {
+    protected AdditionalPropertiesState() {}
 
     @Override
     public void process() throws IOException {
@@ -28,5 +19,14 @@ public class AdditionalPropertiesState implements State {
                 System.out.println("type: " + parser.getText());
             }
         }
+    }
+
+    public static AdditionalPropertiesState getInstance(Context context) {
+        SingletonHelper.INSTANCE.setContext(context);
+        return SingletonHelper.INSTANCE;
+    }
+
+    private static class SingletonHelper {
+        private static final AdditionalPropertiesState INSTANCE = new AdditionalPropertiesState();
     }
 }

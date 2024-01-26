@@ -5,18 +5,8 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
 import java.io.IOException;
 
-public class MethodSecurityState implements State {
-
-    private Context context;
-
-    public MethodSecurityState(Context context) {
-        this.context = context;
-    }
-
-    @Override
-    public void setState(State state) {
-        this.context.setCurrentState(state);
-    }
+public class MethodSecurityState extends State {
+    protected MethodSecurityState() {}
 
     @Override
     public void process() throws IOException {
@@ -40,5 +30,14 @@ public class MethodSecurityState implements State {
                 }
             }
         }
+    }
+
+    public static MethodSecurityState getInstance(Context context) {
+        SingletonHelper.INSTANCE.setContext(context);
+        return SingletonHelper.INSTANCE;
+    }
+
+    private static class SingletonHelper {
+        private static final MethodSecurityState INSTANCE = new MethodSecurityState();
     }
 }

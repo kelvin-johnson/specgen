@@ -3,20 +3,10 @@ package com.codernaught.specgen.lib.states;
 import com.codernaught.specgen.lib.Context;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
-
 import java.io.IOException;
 
-public class InfoState implements State {
-
-    private Context context;
-
-    public InfoState(Context context) {
-        this.context = context;
-    }
-    @Override
-    public void setState(State state) {
-        context.setCurrentState(state);
-    }
+public class InfoState extends State {
+    protected InfoState() { }
 
     @Override
     public void process() throws IOException {
@@ -43,14 +33,14 @@ public class InfoState implements State {
             }
 
             if ("contact".equals(fieldName)) {
-                State infoContactState = new InfoContactState(context);
+                IState infoContactState = InfoContactState.getInstance(context);
                 setState(infoContactState);
                 context.process();
                 continue;
             }
 
             if ("license".equals(fieldName)) {
-                State infoLicenseState = new InfoLicenseState(context);
+                IState infoLicenseState = InfoLicenseState.getInstance(context);
                 setState(infoLicenseState);
                 context.process();
             }
@@ -60,5 +50,14 @@ public class InfoState implements State {
 
     public void process(String fieldName, String fieldValue) throws IOException {
 
+    }
+
+    public static InfoState getInstance(Context context) {
+        SingletonHelper.INSTANCE.setContext(context);
+        return SingletonHelper.INSTANCE;
+    }
+
+    private static class SingletonHelper {
+        private static final InfoState INSTANCE = new InfoState();
     }
 }

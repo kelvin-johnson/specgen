@@ -5,18 +5,8 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
 import java.io.IOException;
 
-public class SchemeState implements State {
-
-    private Context context;
-
-    public SchemeState(Context context) {
-        this.context = context;
-    }
-
-    @Override
-    public void setState(State state) {
-        context.setCurrentState(state);
-    }
+public class SchemeState extends State {
+    protected SchemeState() {}
 
     @Override
     public void process() throws IOException {
@@ -25,5 +15,14 @@ public class SchemeState implements State {
         while (parser.nextToken() != JsonToken.END_ARRAY) {
             System.out.println("scheme: " + parser.getText());
         }
+    }
+
+    public static SchemeState getInstance(Context context) {
+        SingletonHelper.INSTANCE.setContext(context);
+        return SingletonHelper.INSTANCE;
+    }
+
+    private static class SingletonHelper {
+        private static final SchemeState INSTANCE = new SchemeState();
     }
 }

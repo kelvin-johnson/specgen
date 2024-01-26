@@ -6,18 +6,8 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
 
 import java.io.IOException;
 
-public class InfoLicenseState implements State {
-
-    private Context context;
-
-    public InfoLicenseState(Context context) {
-        this.context = context;
-    }
-
-    @Override
-    public void setState(State state) {
-        context.setCurrentState(state);
-    }
+public class InfoLicenseState extends State {
+    protected InfoLicenseState() {}
 
     @Override
     public void process() throws IOException {
@@ -36,5 +26,14 @@ public class InfoLicenseState implements State {
                 System.out.println("License URL: " + parser.getText());
             }
         }
+    }
+
+    public static InfoLicenseState getInstance(Context context) {
+        SingletonHelper.INSTANCE.setContext(context);
+        return SingletonHelper.INSTANCE;
+    }
+
+    private static class SingletonHelper {
+        private static final InfoLicenseState INSTANCE = new InfoLicenseState();
     }
 }

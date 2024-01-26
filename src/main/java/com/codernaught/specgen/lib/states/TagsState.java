@@ -5,18 +5,8 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
 import java.io.IOException;
 
-public class TagsState implements State {
-
-    private Context context;
-
-    public TagsState(Context context) {
-        this.context = context;
-    }
-
-    @Override
-    public void setState(State state) {
-        context.setCurrentState(state);
-    }
+public class TagsState extends State {
+    protected TagsState() {}
 
     @Override
     public void process() throws IOException {
@@ -29,5 +19,14 @@ public class TagsState implements State {
                 System.out.println("Tag Name: " + parser.getText());
             }
         }
+    }
+
+    public static TagsState getInstance(Context context) {
+        SingletonHelper.INSTANCE.setContext(context);
+        return SingletonHelper.INSTANCE;
+    }
+
+    private static class SingletonHelper {
+        private static final TagsState INSTANCE = new TagsState();
     }
 }

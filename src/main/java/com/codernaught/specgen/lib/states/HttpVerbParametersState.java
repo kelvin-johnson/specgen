@@ -6,26 +6,26 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
 
 import java.io.IOException;
 
-public class HttpVerbParametersState implements State {
+public class HttpVerbParametersState extends State {
 
-    private Context context;
-
-    @Override
-    public void setState(State state) {
-        this.context.setCurrentState(state);
-    }
-
-    public HttpVerbParametersState(Context context) {
-        this.context = context;
-    }
+    private HttpVerbParametersState() {}
 
     @Override
     public void process() throws IOException {
         YAMLParser parser = context.getParser();
         while (parser.nextToken() != JsonToken.END_ARRAY) {
-            State parameterState = new ParameterState(context);
+            IState parameterState = ParameterState.getInstance(context);
             setState(parameterState);
             context.process();
         }
+    }
+
+    public static HttpVerbParametersState getInstance(Context context) {
+        SingletonHelper.INSTANCE.setContext(context);
+        return SingletonHelper.INSTANCE;
+    }
+
+    private static class SingletonHelper {
+        private static final HttpVerbParametersState INSTANCE = new HttpVerbParametersState();
     }
 }

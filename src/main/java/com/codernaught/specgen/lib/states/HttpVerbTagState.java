@@ -5,18 +5,8 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
 import java.io.IOException;
 
-public class HttpVerbTagState implements State {
-
-    private Context context;
-
-    @Override
-    public void setState(State state) {
-        this.context.setCurrentState(state);
-    }
-
-    public HttpVerbTagState(Context context) {
-        this.context = context;
-    }
+public class HttpVerbTagState extends State {
+    protected HttpVerbTagState() {}
 
     @Override
     public void process() throws IOException {
@@ -25,5 +15,14 @@ public class HttpVerbTagState implements State {
         while (parser.nextToken() != JsonToken.END_ARRAY) {
             System.out.println("Tag: " + parser.getText());
         }
+    }
+
+    public static HttpVerbTagState getInstance(Context context) {
+        SingletonHelper.INSTANCE.setContext(context);
+        return SingletonHelper.INSTANCE;
+    }
+
+    private static class SingletonHelper {
+        private static final HttpVerbTagState INSTANCE = new HttpVerbTagState();
     }
 }

@@ -5,16 +5,8 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
 import java.io.IOException;
 
-public class PathState implements State {
-    private Context context;
-
-    public PathState(Context context) {
-        this.context = context;
-    }
-    @Override
-    public void setState(State state) {
-        this.context.setCurrentState(state);
-    }
+public class PathState extends State {
+    protected PathState() {}
 
     @Override
     public void process() throws IOException {
@@ -27,10 +19,19 @@ public class PathState implements State {
                     || "put".equals(fieldName)
                     || "delete".equals(fieldName)) {
                 System.out.println("httpVerb: " + fieldName);
-                State httpVerbState = new HttpVerbState(context);
+                IState httpVerbState = HttpVerbState.getInstance(context);
                 setState(httpVerbState);
                 context.process();
             }
         }
+    }
+
+    public static PathState getInstance(Context context) {
+        SingletonHelper.INSTANCE.setContext(context);
+        return SingletonHelper.INSTANCE;
+    }
+
+    private static class SingletonHelper {
+        private static final PathState INSTANCE = new PathState();
     }
 }

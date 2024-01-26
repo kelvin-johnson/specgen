@@ -3,21 +3,10 @@ package com.codernaught.specgen.lib.states;
 import com.codernaught.specgen.lib.Context;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
-
 import java.io.IOException;
 
-public class HttpVerbResponsesState implements State {
-
-    private Context context;
-
-    public HttpVerbResponsesState(Context context) {
-        this.context = context;
-    }
-
-    @Override
-    public void setState(State state) {
-        this.context.setCurrentState(state);
-    }
+public class HttpVerbResponsesState extends State {
+    protected HttpVerbResponsesState() {}
 
     @Override
     public void process() throws IOException {
@@ -33,10 +22,20 @@ public class HttpVerbResponsesState implements State {
                     fieldName.length() == 3) {
 
                 System.out.println("Http Status Code: " + fieldName);
-                State httpResponseState = new HttpResponseState(context);
+                IState httpResponseState = HttpResponseState.getInstance(context);
                 setState(httpResponseState);
                 context.process();
             }
         }
     }
+
+    public static HttpVerbResponsesState getInstance(Context context) {
+        SingletonHelper.INSTANCE.setContext(context);
+        return SingletonHelper.INSTANCE;
+    }
+
+    private static class SingletonHelper {
+        private static final HttpVerbResponsesState INSTANCE = new HttpVerbResponsesState();
+    }
+
 }

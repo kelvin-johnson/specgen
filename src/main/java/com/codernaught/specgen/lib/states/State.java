@@ -1,13 +1,16 @@
 package com.codernaught.specgen.lib.states;
 
-import java.io.IOException;
+import com.codernaught.specgen.lib.Context;
 
-public interface State {
+public abstract class State implements IState {
+    protected Context context;
 
-    void setState(State state);
+    @Override
+    public void setContext(Context context) { this.context = context; }
 
-    void process() throws IOException;
-    //void process(String fieldName, String fieldValue) throws IOException;
-
+    @Override
+    public void setState(IState state) {
+        context.setCurrentState(state);
+    }
 
 }
